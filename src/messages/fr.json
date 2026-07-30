@@ -1,0 +1,25 @@
+{
+  "app": {
+    "name": "CourseSync",
+    "tagline": "La liste de courses du foyer, synchronisée en temps réel"
+  },
+  "list": {
+    "addPlaceholder": "Ajouter un article...",
+    "add": "Ajouter",
+    "empty": "La liste est vide. Ajoutez votre premier article !",
+    "itemCount": "{count, plural, =0 {Aucun article} one {# article} other {# articles}}",
+    "clearChecked": "Vider les articles cochés"
+  },
+  "suggestions": {
+    "title": "Vous rachetez peut-être...",
+    "subtitle": "Basé sur vos habitudes d'achat",
+    "empty": "Les suggestions apparaîtront au fil de vos achats."
+  },
+  "footer": {
+    "copyright": "© {year} Riadh MNASRI"
+  },
+  "locale": {
+    "fr": "Français",
+    "en": "English"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "app": {
+    "name": "CourseSync",
+    "tagline": "The household shopping list, synced in real time"
+  },
+  "list": {
+    "addPlaceholder": "Add an item...",
+    "add": "Add",
+    "empty": "The list is empty. Add your first item!",
+    "itemCount": "{count, plural, =0 {No items} one {# item} other {# items}}",
+    "clearChecked": "Clear checked items"
+  },
+  "suggestions": {
+    "title": "You might be out of...",
+    "subtitle": "Based on your shopping habits",
+    "empty": "Suggestions will appear as you shop."
+  },
+  "footer": {
+    "copyright": "© {year} Riadh MNASRI"
+  },
+  "locale": {
+    "fr": "Français",
+    "en": "English"
+  }
+}

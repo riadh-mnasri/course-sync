@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CourseSync
 
-## Getting Started
+La liste de courses du foyer, synchronisée en temps réel entre tous les appareils. Ajoutez un article sur votre téléphone, il apparaît instantanément sur celui de votre conjoint(e). CourseSync apprend aussi vos habitudes d'achat et suggère de rajouter les articles que vous rachetez régulièrement.
 
-First, run the development server:
+## Fonctionnalités
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Liste partagée en temps réel (Supabase Realtime) : pas de rechargement nécessaire, les changements apparaissent instantanément sur tous les appareils connectés
+- Cochez les articles pendant vos courses, puis videz le panier en une fois à la fin pour archiver l'historique d'achat
+- Suggestions automatiques basées sur la fréquence de rachat de chaque article
+- Interface bilingue français / anglais
+- Design soigné, pensé mobile-first
+
+## Stack technique
+
+- [Next.js](https://nextjs.org) 16 (App Router, Turbopack)
+- TypeScript
+- Tailwind CSS 4
+- [Supabase](https://supabase.com) (Postgres + Realtime) pour la synchronisation des données
+- [next-intl](https://next-intl.dev) pour l'internationalisation
+
+## Développement local
+
+### Prérequis
+
+- Node.js 20+
+- Un projet Supabase (gratuit) : [supabase.com](https://supabase.com)
+
+### Variables d'environnement
+
+Créer un fichier `.env.local` à la racine :
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://<votre-projet>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<votre-clé-anon-ou-publishable>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Base de données
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Le schéma se trouve dans `supabase/migrations/20260731000001_init.sql`. Il crée :
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- la table `items` (liste active, avec Realtime activé)
+- la table `item_history` (historique des achats, pour les suggestions)
+- la vue `item_habits` (calcul de la fréquence de rachat par article)
 
-## Learn More
+Appliquer ce fichier SQL sur votre projet Supabase (via l'éditeur SQL du dashboard, ou `psql`).
 
-To learn more about Next.js, take a look at the following resources:
+### Lancer le serveur de dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+L'application est disponible sur [http://localhost:3900](http://localhost:3900).
 
-## Deploy on Vercel
+### Tests
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run lint
+npm run build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Déploiement
+
+Déployé sur [Vercel](https://vercel.com). Penser à configurer les variables d'environnement `NEXT_PUBLIC_SUPABASE_URL` et `NEXT_PUBLIC_SUPABASE_ANON_KEY` dans les paramètres du projet Vercel.
+
+## Licence
+
+© 2026 Riadh MNASRI
