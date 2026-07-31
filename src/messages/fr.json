@@ -8,7 +8,9 @@
     "add": "Ajouter",
     "empty": "La liste est vide. Ajoutez votre premier article !",
     "itemCount": "{count, plural, =0 {Aucun article} one {# article} other {# articles}}",
-    "clearChecked": "Vider les articles cochés"
+    "clearChecked": "Vider les articles cochés",
+    "progress": "{checked} sur {total} cochés",
+    "allDone": "Tout est prêt !"
   },
   "suggestions": {
     "title": "Vous rachetez peut-être...",

@@ -8,7 +8,9 @@
     "add": "Add",
     "empty": "The list is empty. Add your first item!",
     "itemCount": "{count, plural, =0 {No items} one {# item} other {# items}}",
-    "clearChecked": "Clear checked items"
+    "clearChecked": "Clear checked items",
+    "progress": "{checked} of {total} checked",
+    "allDone": "All set!"
   },
   "suggestions": {
     "title": "You might be out of...",

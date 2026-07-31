@@ -17,6 +17,7 @@ export default function ShoppingList() {
   const [profileName, setProfileName] = useState<string | null>(null);
   const [profileDraft, setProfileDraft] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [justChecked, setJustChecked] = useState<string | null>(null);
 
   useEffect(() => {
     setProfileName(localStorage.getItem(PROFILE_KEY));
@@ -101,6 +102,10 @@ export default function ShoppingList() {
   }
 
   async function toggleItem(item: Item) {
+    if (!item.checked) {
+      setJustChecked(item.id);
+      setTimeout(() => setJustChecked(null), 300);
+    }
     await supabase
       .from("items")
       .update({
@@ -139,11 +144,14 @@ export default function ShoppingList() {
   }
 
   const checkedCount = items.filter((i) => i.checked).length;
+  const totalCount = items.length;
+  const pendingCount = totalCount - checkedCount;
+  const allDone = totalCount > 0 && pendingCount === 0;
 
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col gap-6 px-4 py-8">
       {profileName === null && loaded && (
-        <div className="flex items-center gap-2 rounded-2xl border border-stone-200 bg-white p-3 text-sm shadow-sm">
+        <div className="animate-pop-in flex items-center gap-2 rounded-2xl border border-stone-200 bg-white p-3 text-sm shadow-sm">
           <span className="text-stone-500">Comment tu t&rsquo;appelles ?</span>
           <input
             value={profileDraft}
@@ -161,6 +169,27 @@ export default function ShoppingList() {
         </div>
       )}
 
+      {totalCount > 0 && (
+        <div className="flex flex-col gap-2 rounded-2xl border border-emerald-100 bg-emerald-50/60 px-4 py-3">
+          <div className="flex items-center justify-between text-sm">
+            <span className="font-medium text-emerald-800">
+              {allDone
+                ? `🎉 ${t("allDone")}`
+                : t("progress", { checked: checkedCount, total: totalCount })}
+            </span>
+            <span className="text-emerald-600">
+              {Math.round((checkedCount / totalCount) * 100)}%
+            </span>
+          </div>
+          <div className="h-2 w-full overflow-hidden rounded-full bg-emerald-100">
+            <div
+              className="h-full rounded-full bg-emerald-500 transition-all duration-500 ease-out"
+              style={{ width: `${(checkedCount / totalCount) * 100}%` }}
+            />
+          </div>
+        </div>
+      )}
+
       {dueSuggestions.length > 0 && (
         <div>
           <div className="mb-2 flex items-baseline justify-between">
@@ -174,9 +203,10 @@ export default function ShoppingList() {
               <button
                 key={h.name_key}
                 onClick={() => addItem(h.name)}
-                className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm text-amber-800 transition hover:border-amber-300 hover:bg-amber-100"
+                className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm text-amber-800 shadow-sm transition hover:-translate-y-0.5 hover:border-amber-300 hover:bg-amber-100 hover:shadow"
               >
-                + {h.name}
+                <span className="text-amber-500">↻</span>
+                {h.name}
               </button>
             ))}
           </div>
@@ -206,7 +236,7 @@ export default function ShoppingList() {
 
       <div className="flex items-center justify-between px-1">
         <span className="text-sm text-stone-500">
-          {t("itemCount", { count: items.filter((i) => !i.checked).length })}
+          {t("itemCount", { count: pendingCount })}
         </span>
         {checkedCount > 0 && (
           <button
@@ -220,14 +250,15 @@ export default function ShoppingList() {
 
       <ul className="flex flex-col gap-2">
         {sortedItems.length === 0 && loaded && (
-          <li className="rounded-2xl border border-dashed border-stone-200 px-4 py-8 text-center text-stone-400">
-            {t("empty")}
+          <li className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-stone-200 px-4 py-12 text-center">
+            <span className="text-4xl">🧺</span>
+            <span className="text-stone-400">{t("empty")}</span>
           </li>
         )}
         {sortedItems.map((item) => (
           <li
             key={item.id}
-            className={`group flex items-center gap-3 rounded-2xl border px-4 py-3 shadow-sm transition ${
+            className={`animate-pop-in group flex items-center gap-3 rounded-2xl border px-4 py-3 shadow-sm transition-colors ${
               item.checked
                 ? "border-stone-100 bg-stone-50"
                 : "border-stone-200 bg-white"
@@ -235,7 +266,9 @@ export default function ShoppingList() {
           >
             <button
               onClick={() => toggleItem(item)}
-              className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition ${
+              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 transition ${
+                justChecked === item.id ? "animate-check-pop" : ""
+              } ${
                 item.checked
                   ? "border-emerald-500 bg-emerald-500 text-white"
                   : "border-stone-300 hover:border-emerald-400"
@@ -255,7 +288,7 @@ export default function ShoppingList() {
               )}
             </button>
             <span
-              className={`flex-1 text-base ${
+              className={`flex-1 text-base transition-colors ${
                 item.checked ? "text-stone-400 line-through" : "text-stone-900"
               }`}
             >
