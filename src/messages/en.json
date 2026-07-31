@@ -10,7 +10,9 @@
     "itemCount": "{count, plural, =0 {No items} one {# item} other {# items}}",
     "clearChecked": "Clear checked items",
     "progress": "{checked} of {total} checked",
-    "allDone": "All set!"
+    "allDone": "All set!",
+    "share": "Share",
+    "shareTitle": "Shopping list"
   },
   "suggestions": {
     "title": "You might be out of...",

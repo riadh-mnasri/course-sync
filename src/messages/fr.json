@@ -10,7 +10,9 @@
     "itemCount": "{count, plural, =0 {Aucun article} one {# article} other {# articles}}",
     "clearChecked": "Vider les articles cochés",
     "progress": "{checked} sur {total} cochés",
-    "allDone": "Tout est prêt !"
+    "allDone": "Tout est prêt !",
+    "share": "Partager",
+    "shareTitle": "Liste de courses"
   },
   "suggestions": {
     "title": "Vous rachetez peut-être...",

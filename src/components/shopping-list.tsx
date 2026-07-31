@@ -143,6 +143,20 @@ export default function ShoppingList() {
     setProfileName(trimmed);
   }
 
+  function shareList() {
+    const pendingItems = items.filter((i) => !i.checked);
+    if (pendingItems.length === 0) return;
+    const text = `🧺 ${t("shareTitle")}\n${pendingItems
+      .map((i) => `- ${i.name}`)
+      .join("\n")}`;
+
+    if (typeof navigator !== "undefined" && navigator.share) {
+      navigator.share({ text }).catch(() => {});
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+    }
+  }
+
   const checkedCount = items.filter((i) => i.checked).length;
   const totalCount = items.length;
   const pendingCount = totalCount - checkedCount;
@@ -238,14 +252,37 @@ export default function ShoppingList() {
         <span className="text-sm text-stone-500">
           {t("itemCount", { count: pendingCount })}
         </span>
-        {checkedCount > 0 && (
-          <button
-            onClick={clearChecked}
-            className="text-sm font-medium text-emerald-700 transition hover:text-emerald-900"
-          >
-            {t("clearChecked")}
-          </button>
-        )}
+        <div className="flex items-center gap-4">
+          {pendingCount > 0 && (
+            <button
+              onClick={shareList}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 transition hover:text-emerald-700"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8.68 13.34l6.63 3.83M15.31 6.84l-6.63 3.83M18 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM8 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM18 19a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"
+                />
+              </svg>
+              {t("share")}
+            </button>
+          )}
+          {checkedCount > 0 && (
+            <button
+              onClick={clearChecked}
+              className="text-sm font-medium text-emerald-700 transition hover:text-emerald-900"
+            >
+              {t("clearChecked")}
+            </button>
+          )}
+        </div>
       </div>
 
       <ul className="flex flex-col gap-2">

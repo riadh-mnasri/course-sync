@@ -23,35 +23,39 @@ La liste de courses du foyer, synchronisée en temps réel entre tous les appare
 ### Prérequis
 
 - Node.js 20+
-- Un projet Supabase (gratuit) : [supabase.com](https://supabase.com)
+- [Docker](https://www.docker.com) (pour faire tourner Supabase en local, isolé de la production)
+- Le [CLI Supabase](https://supabase.com/docs/guides/local-development/cli/getting-started)
+
+### Base de données locale
+
+Le développement utilise une instance Supabase 100% locale (Postgres + Realtime dans Docker), séparée de la base de production. Aucune donnée réelle n'est jamais touchée pendant le dev.
+
+```bash
+supabase start
+```
+
+Cette commande applique automatiquement le schéma de `supabase/migrations/20260731000001_init.sql` (table `items`, table `item_history`, vue `item_habits`) sur la base locale. À l'arrêt : `supabase stop`.
 
 ### Variables d'environnement
 
-Créer un fichier `.env.local` à la racine :
+`.env.local` (non versionné) pointe vers l'instance locale :
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=https://<votre-projet>.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<votre-clé-anon-ou-publishable>
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<clé anon affichée par `supabase status`>
 ```
 
-### Base de données
-
-Le schéma se trouve dans `supabase/migrations/20260731000001_init.sql`. Il crée :
-
-- la table `items` (liste active, avec Realtime activé)
-- la table `item_history` (historique des achats, pour les suggestions)
-- la vue `item_habits` (calcul de la fréquence de rachat par article)
-
-Appliquer ce fichier SQL sur votre projet Supabase (via l'éditeur SQL du dashboard, ou `psql`).
+Les identifiants de production (utilisés uniquement par Vercel) sont dans `.env.production.local` (non versionné, à ne jamais utiliser en dev).
 
 ### Lancer le serveur de dev
 
 ```bash
 npm install
+supabase start
 npm run dev
 ```
 
-L'application est disponible sur [http://localhost:3900](http://localhost:3900).
+L'application est disponible sur [http://localhost:3900](http://localhost:3900). Le Studio Supabase local (pour inspecter les données de dev) est sur [http://localhost:54323](http://localhost:54323).
 
 ### Tests
 

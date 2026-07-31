@@ -23,35 +23,39 @@ The household shopping list, synced in real time across every device. Add an ite
 ### Prerequisites
 
 - Node.js 20+
-- A Supabase project (free tier): [supabase.com](https://supabase.com)
+- [Docker](https://www.docker.com) (to run Supabase locally, isolated from production)
+- The [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started)
+
+### Local database
+
+Development uses a fully local Supabase instance (Postgres + Realtime in Docker), separate from the production database. No real data is ever touched during development.
+
+```bash
+supabase start
+```
+
+This automatically applies the schema from `supabase/migrations/20260731000001_init.sql` (`items` table, `item_history` table, `item_habits` view) to the local database. To stop: `supabase stop`.
 
 ### Environment variables
 
-Create a `.env.local` file at the project root:
+`.env.local` (not committed) points to the local instance:
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=https://<your-project>.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-or-publishable-key>
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key printed by `supabase status`>
 ```
 
-### Database
-
-The schema lives in `supabase/migrations/20260731000001_init.sql`. It creates:
-
-- the `items` table (active list, with Realtime enabled)
-- the `item_history` table (purchase history, for suggestions)
-- the `item_habits` view (computes repurchase frequency per item)
-
-Apply this SQL file to your Supabase project (via the dashboard SQL editor, or `psql`).
+Production credentials (used only by Vercel) live in `.env.production.local` (not committed, never use in dev).
 
 ### Run the dev server
 
 ```bash
 npm install
+supabase start
 npm run dev
 ```
 
-The app is available at [http://localhost:3900](http://localhost:3900).
+The app is available at [http://localhost:3900](http://localhost:3900). The local Supabase Studio (to inspect dev data) is at [http://localhost:54323](http://localhost:54323).
 
 ### Tests
 
