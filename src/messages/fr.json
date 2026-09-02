@@ -20,7 +20,7 @@
     "empty": "Les suggestions apparaîtront au fil de vos achats."
   },
   "footer": {
-    "copyright": "© {year} Riadh MNASRI"
+    "copyright": "© {year} <a>Riadh MNASRI</a>"
   },
   "locale": {
     "fr": "Français",

@@ -6,7 +6,14 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-stone-200 py-6 text-center text-sm text-stone-400">
-      {t("copyright", { year })}
+      {t.rich("copyright", {
+        year,
+        a: (chunks) => (
+          <a href="https://riadh-mnasri.pro" className="hover:underline">
+            {chunks}
+          </a>
+        ),
+      })}
     </footer>
   );
 }
